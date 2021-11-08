@@ -152,7 +152,7 @@ BEGIN
         SET @price_per_min = 2.50;
         SET @start_time = (SELECT start_time FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1);
         SET @minutes_traveled = TIMESTAMPDIFF(MINUTE, @start_time, NOW());
-        SET @travel_cost = @price_per_min * $minutes_traveled;
+        SET @travel_cost = @price_per_min * @minutes_traveled;
         -- parking prices
         SET @parking_cost_station = 20;
         SET @parking_cost_zone = 30;

@@ -52,12 +52,12 @@ VALUES
 -- SCOOTER UPDATE, TEST LOG  --
 -------------------------------
 
--- UPDATE
--- 	scooter
--- SET
--- 	customer_id=2,
---     rented=1,
---     speed=25
--- WHERE
--- 	id=1;
--- select * from logg;
+UPDATE
+	scooter
+SET
+	customer_id=2,
+    rented=1,
+    speed=25
+WHERE
+	id=1;
+select * from logg;

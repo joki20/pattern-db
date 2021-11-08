@@ -189,7 +189,10 @@ ON scooter FOR EACH ROW -- chech each table row for changes
 -- WHERE filters out latest id row with this customer
 BEGIN
     -- scooter row where customer is no longer assigned to specific scooter
-    IF (OLD.customer_id != NULL AND NEW.customer_id = NULL) THEN
+    IF (
+        NOT OLD.customer_id IS NULL AND
+        NEW.customer_id IS NULL
+        ) THEN
         -- start cost
         SET @start_cost = 20;
         -- travelling cost
@@ -282,18 +285,6 @@ BEGIN
             total_cost = @start_cost
         WHERE  -- find latest id (current travel log) with this customer
             id = (SELECT id FROM logg WHERE customer_id=OLD.customer_id ORDER BY id DESC LIMIT 1);
-
-
-        -- UPDATE SCOOTER STATUS
-        --
-        -- NOTE: a button press will remove customer_id from this scooter
-        UPDATE scooter
-        SET
-            customer_id = NULL,
-            rented = 0,
-            speed = 0
-        WHERE
-            id = (SELECT id FROM scooter WHERE id=NEW.id);
 
     END IF;
 END

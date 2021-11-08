@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS station;
 DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS adm;
+
 DROP VIEW IF EXISTS v_logg;
 
 -- --------------------------------------------------------------------------------------
@@ -259,8 +260,7 @@ DELIMITER ;
 
 
 -- orderrad, produktid, produkt, antal, pris, totalpris, summa
-DROP VIEW IF EXISTS v_logg;
-CREATE VIEW v_reslogg AS
+CREATE VIEW v_logg AS
 SELECT
     cus.username AS username, -- don't change column names to simplify for frontend
     s.location,

@@ -2,7 +2,7 @@
 -- CUSTOMER TABLE --
 --------------------
 
-DELETE FROM customer;
+DELETE FROM customer WHERE id > 0;
 
 INSERT INTO 
     customer (username, password, funds, payment_terms)
@@ -16,7 +16,7 @@ VALUES
 -- CITY TABLE ------
 --------------------
 
-DELETE FROM city;
+DELETE FROM city WHERE id > 0;
 
 INSERT INTO
     city (name, lat_center, lon_center, radius)
@@ -29,7 +29,7 @@ VALUES
 -- ADMIN TABLE  ----
 --------------------
 
-DELETE FROM adm;
+DELETE FROM adm WHERE id > 0;
 
 INSERT INTO
     adm (username, password)
@@ -41,7 +41,7 @@ VALUES
 -- SCOOTER TABLE  --
 --------------------
 
-DELETE FROM scooter;
+DELETE FROM scooter WHERE id > 0;
 
 INSERT INTO
     scooter (city_id, battery_level, speed)

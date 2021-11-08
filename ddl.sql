@@ -7,6 +7,9 @@ DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS adm;
 
+DROP TRIGGER IF EXISTS logg_insert;
+DROP TRIGGER IF EXISTS logg_update;
+
 DROP VIEW IF EXISTS v_logg;
 
 -- --------------------------------------------------------------------------------------
@@ -110,8 +113,52 @@ CREATE TABLE logg
 ENGINE INNODB
 ;
 
+
+-- SET ALL ID TO START FROM 1
+ALTER TABLE scooter AUTO_INCREMENT = 1;
+ALTER TABLE customer AUTO_INCREMENT = 1;
+ALTER TABLE adm AUTO_INCREMENT = 1;
+ALTER TABLE city AUTO_INCREMENT = 1;
+ALTER TABLE logg AUTO_INCREMENT = 1;
+
+
 DROP TRIGGER IF EXISTS logg_insert;
 DROP TRIGGER IF EXISTS logg_update;
+
+-- CREATE TABLE scooter
+-- (
+--     `id` INT NOT NULL AUTO_INCREMENT,
+--     `customer_id` INT,
+--     `city_id` INT,
+--     `station_id` INT,
+--     `rented` BOOLEAN DEFAULT 0, -- false
+--     `lat_pos` DECIMAL,
+--     `lon_pos` DECIMAL,
+--     `maintenance_mode` BOOLEAN DEFAULT 0, -- false
+--     `active` BOOLEAN DEFAULT 1, -- true
+--     `speed` DECIMAL,
+--     `battery_level` DECIMAL,
+
+--     PRIMARY KEY (`id`),
+--     FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+--     FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
+--     FOREIGN KEY (`station_id`) REFERENCES `station` (`id`)
+-- )
+-- ENGINE INNODB
+-- ;
+
+-- CREATE TABLE logg
+-- (
+--     `id` INTEGER NOT NULL AUTO_INCREMENT,
+--     `customer_id` INT,
+--     `scooter_id` INT,
+--     `start_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     `end_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     `start_lat` DECIMAL,
+--     `start_lon` DECIMAL,
+--     `end_lat` DECIMAL,
+--     `end_lon` DECIMAL,
+--     `total_cost` DECIMAL DEFAULT 0,
 
 DELIMITER ;;
 CREATE TRIGGER logg_insert
@@ -119,20 +166,16 @@ AFTER UPDATE
 ON scooter FOR EACH ROW -- chech each table row
 BEGIN
     -- if a customer is assigned to scooter
-    IF (OLD.customer_id = NULL AND NEW.customer_id != NULL) THEN
+    IF (
+        OLD.customer_id IS NULL AND
+        NOT NEW.customer_id IS NULL
+        ) THEN
+        
         -- insert new entry into logg table user, scooter, start time, lat, lot
         INSERT INTO logg (customer_id, scooter_id, start_time, start_lat, start_lon, total_cost)
         VALUES (NEW.customer_id, NEW.id, NOW(), OLD.lat_pos, OLD.lon_pos, @start_cost);
 
-        -- UPDATE SCOOTER STATUS
-        --
-        -- NOTE: a button press will add customer_id for this scooter
-        UPDATE scooter
-        SET
-            rented = 1,
-            speed = 25 -- km/h
-        WHERE
-            id = (SELECT id FROM scooter WHERE id=NEW.id);
+
     END IF;
 END
 ;;
@@ -346,5 +389,4 @@ ON c.id = s.id
 -- END;
 -- ;;
 -- DELIMITER ;
-
 

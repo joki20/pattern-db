@@ -1,8 +1,22 @@
+DELETE FROM scooter WHERE id > 0;
+DELETE FROM customer WHERE id > 0;
+DELETE FROM adm WHERE id > 0;
+DELETE FROM city WHERE id > 0;
+
+--------------------
+-- ADMIN TABLE  ----
+--------------------
+
+INSERT INTO
+    adm (username, password)
+VALUES
+    ('admin', 'password');
+
+
 --------------------
 -- CUSTOMER TABLE --
 --------------------
 
-DELETE FROM customer WHERE id > 0;
 
 INSERT INTO 
     customer (username, password, funds, payment_terms)
@@ -12,11 +26,10 @@ VALUES
     ('datalowe', 'lowe', 300.0, 'prepaid'),
     ('jokris', 'johan', 450.0, 'credit');
 
+
 --------------------
 -- CITY TABLE ------
 --------------------
-
-DELETE FROM city WHERE id > 0;
 
 INSERT INTO
     city (name, lat_center, lon_center, radius)
@@ -25,25 +38,26 @@ VALUES
     ('Bjästa', 63.2012144, 18.4735663, 0),
     ('Klågerup', 55.5955693, 13.2308113, 0);
 
---------------------
--- ADMIN TABLE  ----
---------------------
-
-DELETE FROM adm WHERE id > 0;
-
-INSERT INTO
-    adm (username, password)
-VALUES
-    ('admin', 'password');
-
 
 --------------------
 -- SCOOTER TABLE  --
 --------------------
 
-DELETE FROM scooter WHERE id > 0;
-
 INSERT INTO
     scooter (city_id, battery_level, speed)
 VALUES
     (1, 90, 0);
+
+-------------------------------
+-- SCOOTER UPDATE, TEST LOG  --
+-------------------------------
+
+-- UPDATE
+-- 	scooter
+-- SET
+-- 	customer_id=2,
+--     rented=1,
+--     speed=25
+-- WHERE
+-- 	id=1;
+-- select * from logg;

@@ -46,7 +46,7 @@ CREATE TABLE city
 (
     `id` INT NOT NULL AUTO_INCREMENT,
     `name` CHAR(20) NOT NULL UNIQUE,
-    `lat_center` DECIMAL(8,6),
+    `lat_center` DECIMAL(9,6),
     `lon_center` DECIMAL(9,6),
     `radius` DECIMAL,
 
@@ -60,8 +60,8 @@ CREATE TABLE station
     `id` INT NOT NULL AUTO_INCREMENT,
     `city_id` INT,
     `location` CHAR(20),
-    `lat_center` DECIMAL,
-    `lon_center` DECIMAL,
+    `lat_center` DECIMAL(9,6),
+    `lon_center` DECIMAL(9,6),
     `radius` DECIMAL DEFAULT 0.002,
     `charge` BOOLEAN NOT NULL DEFAULT 1, -- true
 
@@ -78,8 +78,8 @@ CREATE TABLE scooter
     `city_id` INT,
     `station_id` INT,
     `rented` BOOLEAN DEFAULT 0, -- false
-    `lat_pos` DECIMAL,
-    `lon_pos` DECIMAL,
+    `lat_pos` DECIMAL(9,6),
+    `lon_pos` DECIMAL(9,6),
     `maintenance_mode` BOOLEAN DEFAULT 0, -- false
     `active` BOOLEAN DEFAULT 1, -- true
     `speed` DECIMAL,
@@ -100,10 +100,10 @@ CREATE TABLE logg
     `scooter_id` INT,
     `start_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `end_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    `start_lat` DECIMAL,
-    `start_lon` DECIMAL,
-    `end_lat` DECIMAL,
-    `end_lon` DECIMAL,
+    `start_lat` DECIMAL(9,6),
+    `start_lon` DECIMAL(9,6),
+    `end_lat` DECIMAL(9,6),
+    `end_lon` DECIMAL(9,6),
     `total_cost` DECIMAL DEFAULT 0,
 
     PRIMARY KEY (`id`),

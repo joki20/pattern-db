@@ -38,7 +38,7 @@ VALUES
     ('Bjästa', 63.2012144, 18.4735663, 0),
     ('Klågerup', 55.5955693, 13.2308113, 0);
 
-
+select * from city;
 --------------------
 -- SCOOTER TABLE  --
 --------------------
@@ -52,12 +52,12 @@ VALUES
 -- SCOOTER UPDATE, TEST LOG  --
 -------------------------------
 
-UPDATE
-	scooter
-SET
-	customer_id=2,
-    rented=1,
-    speed=25
-WHERE
-	id=1;
-select * from logg;
+-- UPDATE
+-- 	scooter
+-- SET
+-- 	customer_id=2,
+--     rented=1,
+--     speed=25
+-- WHERE
+-- 	id=1;
+-- select * from logg;

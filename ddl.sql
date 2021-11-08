@@ -42,8 +42,8 @@ CREATE TABLE city
 (
     `id` INT NOT NULL AUTO_INCREMENT,
     `name` CHAR(20) NOT NULL UNIQUE,
-    `lat_center` DECIMAL,
-    `lon_center` DECIMAL,
+    `lat_center` DECIMAL(8,6),
+    `lon_center` DECIMAL(9,6),
     `radius` DECIMAL,
 
     PRIMARY KEY (`id`)

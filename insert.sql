@@ -1,3 +1,7 @@
+--------------------
+-- CUSTOMER TABLE --
+--------------------
+
 DELETE FROM customer;
 
 INSERT INTO 
@@ -8,6 +12,10 @@ VALUES
     ('datalowe', 'lowe', 300.0, 'prepaid'),
     ('jokris', 'johan', 450.0, 'credit');
 
+--------------------
+-- CITY TABLE ------
+--------------------
+
 DELETE FROM city;
 
 INSERT INTO
@@ -16,3 +24,26 @@ VALUES
     ('Tidaholm', 58.1815656, 13.9546027, 0),
     ('Bjästa', 63.2012144, 18.4735663, 0),
     ('Klågerup', 55.5955693, 13.2308113, 0);
+
+--------------------
+-- ADMIN TABLE  ----
+--------------------
+
+DELETE FROM adm;
+
+INSERT INTO
+    adm (username, password)
+VALUES
+    ('admin', 'password');
+
+
+--------------------
+-- SCOOTER TABLE  --
+--------------------
+
+DELETE FROM scooter;
+
+INSERT INTO
+    scooter (city_id, battery_level, speed)
+VALUES
+    (1, 90, 0);

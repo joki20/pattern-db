@@ -263,7 +263,7 @@ DROP VIEW IF EXISTS v_logg;
 CREATE VIEW v_reslogg AS
 SELECT
     cus.username AS username, -- don't change column names to simplify for frontend
-    sc.location,
+    s.location,
     l.start_time,
     l.end_time,
     l.start_lat,

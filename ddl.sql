@@ -162,7 +162,7 @@ BEGIN
         SET @start_cost = 20;
         -- travelling cost
         SET @price_per_min = 2.50;
-        SET @start_time = (SELECT start_time FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1);
+        SET @start_time = (SELECT * FROM(SELECT start_time FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1)tmp1);
         SET @minutes_traveled = TIMESTAMPDIFF(MINUTE, @start_time, NOW());
         SET @travel_cost = @price_per_min * @minutes_traveled;
         -- parking prices
@@ -172,8 +172,8 @@ BEGIN
         -- total cost
         SET @total_cost = 0;
         -- start points
-        SET @start_lat = (SELECT start_lat FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1);
-        SET @start_lon = (SELECT start_lon FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1);
+        SET @start_lat = (SELECT * FROM(SELECT start_lat FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1)tmp2);
+        SET @start_lon = (SELECT * FROM(SELECT start_lon FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1)tmp3);
 
         -- 1 if started outside of zone, 0 if started within zone or at station
         SET @started_outside_zone = (
@@ -249,7 +249,7 @@ BEGIN
             end_lon = NEW.lon_pos,
             total_cost = @start_cost
         WHERE  -- find latest id (current travel log) with this customer
-            id = (SELECT id FROM logg WHERE customer_id=OLD.customer_id ORDER BY id DESC LIMIT 1);
+            id = (SELECT * FROM(SELECT id FROM logg WHERE customer_id=OLD.customer_id ORDER BY id DESC LIMIT 1)tmp4);
 
     END IF;
 END

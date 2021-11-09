@@ -61,3 +61,13 @@ VALUES
 -- WHERE
 -- 	id=1;
 -- select * from logg;
+
+-- UPDATE
+-- 	scooter
+-- SET
+-- 	customer_id=NULL,
+--     rented=0,
+--     speed=0
+-- WHERE
+-- 	id=1;
+-- select * from logg;

@@ -1,3 +1,4 @@
+USE sctr; -- choose database
 -------------------------------
 -- SCOOTER UPDATE, TEST LOG  --
 -------------------------------

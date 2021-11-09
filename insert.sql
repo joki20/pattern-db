@@ -1,11 +1,12 @@
+USE sctr; -- choose database
 DELETE FROM scooter WHERE id > 0;
 DELETE FROM customer WHERE id > 0;
 DELETE FROM adm WHERE id > 0;
 DELETE FROM city WHERE id > 0;
 
---------------------
+-- ------------------
 -- ADMIN TABLE  ----
---------------------
+-- ------------------
 
 INSERT INTO
     adm (username, password)
@@ -13,9 +14,9 @@ VALUES
     ('admin', 'password');
 
 
---------------------
+-- ------------------
 -- CUSTOMER TABLE --
---------------------
+-- ------------------
 
 
 INSERT INTO 
@@ -27,9 +28,9 @@ VALUES
     ('jokris', 'johan', 450.0, 'credit');
 
 
---------------------
+-- ------------------
 -- CITY TABLE ------
---------------------
+-- ------------------
 
 INSERT INTO
     city (name, lat_center, lon_center, radius)
@@ -39,9 +40,9 @@ VALUES
     ('Klågerup', 55.5955693, 13.2308113, 0);
 
 select * from city;
---------------------
+-- ------------------
 -- SCOOTER TABLE  --
---------------------
+-- ------------------
 
 INSERT INTO
     scooter (city_id, battery_level, speed, lat_pos,

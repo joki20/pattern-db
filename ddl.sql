@@ -13,10 +13,8 @@ DROP TRIGGER IF EXISTS logg_update;
 
 DROP VIEW IF EXISTS v_logg;
 
--- --------------------------------------------------------------------------------------
---
--- produkt, kategori, produkt2lager
---
+
+
 CREATE TABLE adm
 (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -75,7 +73,7 @@ ENGINE INNODB
 CREATE TABLE scooter
 (
     `id` INT NOT NULL AUTO_INCREMENT,
-    `customer_id` INT,
+    `customer_id` INT DEFAULT NULL,
     `city_id` INT,
     `station_id` INT,
     `rented` BOOLEAN DEFAULT 0, -- false
@@ -163,7 +161,7 @@ BEGIN
         SET @start_cost = 20;
         -- travelling cost
         SET @price_per_min = 2.50;
-        SET @start_time = (SELECT * FROM(SELECT start_time FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1)tmp1);
+        SET @start_time = (SELECT start_time FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1);
         SET @minutes_traveled = TIMESTAMPDIFF(MINUTE, @start_time, NOW());
         SET @travel_cost = @price_per_min * @minutes_traveled;
         -- parking prices
@@ -173,8 +171,8 @@ BEGIN
         -- total cost
         SET @total_cost = 0;
         -- start points
-        SET @start_lat = (SELECT * FROM(SELECT start_lat FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1)tmp2);
-        SET @start_lon = (SELECT * FROM(SELECT start_lon FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1)tmp3);
+        SET @start_lat = (SELECT start_lat FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1);
+        SET @start_lon = (SELECT start_lon FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1);
 
         -- 1 if started outside of zone, 0 if started within zone or at station
         SET @started_outside_zone = (
@@ -250,8 +248,7 @@ BEGIN
             end_lon = NEW.lon_pos,
             total_cost = @start_cost
         WHERE  -- find latest id (current travel log) with this customer
-            id = (SELECT * FROM(SELECT id FROM logg WHERE customer_id=OLD.customer_id ORDER BY id DESC LIMIT 1)tmp4);
-
+            id = (SELECT * FROM(SELECT id FROM logg WHERE customer_id=OLD.customer_id ORDER BY id DESC LIMIT 1) AS l);
     END IF;
 END
 ;;
@@ -259,7 +256,6 @@ DELIMITER ;
 
 
 
--- orderrad, produktid, produkt, antal, pris, totalpris, summa
 CREATE VIEW v_logg AS
 SELECT
     cus.username AS username, -- don't change column names to simplify for frontend
@@ -346,4 +342,3 @@ ON c.id = s.id
 -- END;
 -- ;;
 -- DELIMITER ;
-

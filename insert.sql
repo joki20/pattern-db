@@ -44,30 +44,7 @@ select * from city;
 --------------------
 
 INSERT INTO
-    scooter (city_id, battery_level, speed)
+    scooter (city_id, battery_level, speed, lat_pos,
+    lon_pos)
 VALUES
-    (1, 90, 0);
-
--------------------------------
--- SCOOTER UPDATE, TEST LOG  --
--------------------------------
-
--- UPDATE
--- 	scooter
--- SET
--- 	customer_id=2,
---     rented=1,
---     speed=25
--- WHERE
--- 	id=1;
--- select * from logg;
-
--- UPDATE
--- 	scooter
--- SET
--- 	customer_id=NULL,
---     rented=0,
---     speed=0
--- WHERE
--- 	id=1;
--- select * from logg;
+    (1, 90, 0, 55.6004584, 13.0083306);

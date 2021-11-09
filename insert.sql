@@ -1,8 +1,9 @@
-USE sctr; -- choose database
 DELETE FROM scooter WHERE id > 0;
 DELETE FROM customer WHERE id > 0;
 DELETE FROM adm WHERE id > 0;
 DELETE FROM city WHERE id > 0;
+DELETE FROM city WHERE id > 0;
+DELETE FROM logg WHERE id > 0;
 
 -- ------------------
 -- ADMIN TABLE  ----

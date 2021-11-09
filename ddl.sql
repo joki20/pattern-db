@@ -1,4 +1,3 @@
-USE sctr; -- choose database
 -- All code with tables, views, procedures, triggers, and so on.
 -- DROP TABLES, START WITH FOREIGN KEYS TO ELIMINATE DEPENDENCIES
 DROP TABLE IF EXISTS logg;

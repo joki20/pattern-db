@@ -31,7 +31,7 @@ CREATE TABLE customer
     `id` INT NOT NULL AUTO_INCREMENT,
     `username` CHAR(20) UNIQUE,
     `password` CHAR(255),
-    `funds` DECIMAL DEFAULT 0,
+    `funds` DECIMAL(7, 2) DEFAULT 0,
     `payment_terms` CHAR(10),
 
     PRIMARY KEY (`id`)
@@ -47,7 +47,7 @@ CREATE TABLE city
     `name` CHAR(20) NOT NULL UNIQUE,
     `lat_center` DECIMAL(9,6),
     `lon_center` DECIMAL(9,6),
-    `radius` DECIMAL,
+    `radius` DECIMAL(9, 6),
 
     PRIMARY KEY (`id`)
 )
@@ -61,7 +61,7 @@ CREATE TABLE station
     `location` CHAR(20),
     `lat_center` DECIMAL(9,6),
     `lon_center` DECIMAL(9,6),
-    `radius` DECIMAL DEFAULT 0.002,
+    `radius` DECIMAL(9, 6) DEFAULT 0.002,
     `charge` BOOLEAN NOT NULL DEFAULT 1, -- true
 
     PRIMARY KEY (`id`),
@@ -81,8 +81,8 @@ CREATE TABLE scooter
     `lon_pos` DECIMAL(9,6),
     `maintenance_mode` BOOLEAN DEFAULT 0, -- false
     `active` BOOLEAN DEFAULT 1, -- true
-    `speed` DECIMAL,
-    `battery_level` DECIMAL,
+    `speed_kph` INT DEFAULT 0,
+    `battery_level` DECIMAL(1, 4),
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
@@ -98,7 +98,7 @@ CREATE TABLE logg
     `customer_id` INT,
     `scooter_id` INT,
     `start_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    `end_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `end_time` DATETIME DEFAULT NULL,
     `start_lat` DECIMAL(9,6),
     `start_lon` DECIMAL(9,6),
     `end_lat` DECIMAL(9,6),

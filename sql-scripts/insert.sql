@@ -47,7 +47,7 @@ VALUES
 -- ------------------
 
 INSERT INTO
-    scooter (city_id, battery_level, speed, lat_pos,
+    scooter (city_id, battery_level, speed_kph, lat_pos,
     lon_pos)
 VALUES
     (1, 90, 0, 55.6004584, 13.0083306);

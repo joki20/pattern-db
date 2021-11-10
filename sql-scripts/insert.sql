@@ -1,3 +1,4 @@
+USE sctr; -- choose database (needed for MySQL Docker containers)
 DELETE FROM scooter WHERE id > 0;
 DELETE FROM customer WHERE id > 0;
 DELETE FROM adm WHERE id > 0;

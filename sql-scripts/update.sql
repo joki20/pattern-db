@@ -1,6 +1,7 @@
--------------------------------
+USE sctr; -- choose database (needed for MySQL Docker containers)
+-- -----------------------------
 -- SCOOTER UPDATE, TEST LOG  --
--------------------------------
+-- -----------------------------
 
 -- Rent scooter
 UPDATE

@@ -37,6 +37,7 @@ CREATE TABLE customer
     `username` VARCHAR(20) UNIQUE,
     `password` CHAR(255),
     `funds` DECIMAL(7, 2) DEFAULT 0,
+    `payment_terms` ENUM('credit','prepaid') DEFAULT 'credit',
 
     PRIMARY KEY (`id`)
 )

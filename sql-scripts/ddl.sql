@@ -85,7 +85,7 @@ CREATE TABLE scooter
     `maintenance_mode` BOOLEAN DEFAULT 0, -- false
     `active` BOOLEAN DEFAULT 1, -- true
     `speed_kph` INT DEFAULT 0,
-    `battery_level` DECIMAL(5, 2),
+    `battery_level` INT DEFAULT 100,
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),

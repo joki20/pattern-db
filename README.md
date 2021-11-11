@@ -26,4 +26,10 @@ docker stop sctr-db
 docker rm sctr-db
 ```
 
+(if you like to keep your images tidy)
+Remove the image
+```bash
+docker rmi sctr/db:private
+```
+
 _Note_ that this is only for development - in the end, this repository's code and Dockerfile are to be used by a docker-compose file which combines all parts of the SCTR project.

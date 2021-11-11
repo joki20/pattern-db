@@ -8,6 +8,9 @@ DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS adm;
 
+-- drop functions
+DROP FUNCTION IF EXISTS calc_geo_dist;
+
 DROP TRIGGER IF EXISTS logg_insert;
 DROP TRIGGER IF EXISTS logg_update;
 
@@ -82,7 +85,7 @@ CREATE TABLE scooter
     `maintenance_mode` BOOLEAN DEFAULT 0, -- false
     `active` BOOLEAN DEFAULT 1, -- true
     `speed_kph` INT DEFAULT 0,
-    `battery_level` DECIMAL(1, 4),
+    `battery_level` DECIMAL(5, 2),
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
@@ -119,6 +122,35 @@ ALTER TABLE customer AUTO_INCREMENT = 1;
 ALTER TABLE adm AUTO_INCREMENT = 1;
 ALTER TABLE city AUTO_INCREMENT = 1;
 ALTER TABLE logg AUTO_INCREMENT = 1;
+
+-- 
+-- functions
+-- ----------------
+DELIMITER ;;
+-- Calculate distance in degrees between
+-- two geographical locations, based on their
+-- lat-/longitudes (using Pythagora's theorem) 
+-- Note that this function
+-- assumes that the earth is 'flat', ie that
+-- one degree in 'latitudinal' direction is the same
+-- as one degree in 'longitudinal' direction regardless
+-- of where the points are located on Earth, so don't
+-- rely on it for calculating longer distances or truly
+-- critical calculations.
+CREATE FUNCTION calc_geo_dist(
+	start_lat DECIMAL(9, 6),
+    start_lon DECIMAL(9, 6),
+    end_lat DECIMAL(9, 6),
+    end_lon DECIMAL(9, 6)
+)
+RETURNS DECIMAL(9, 6)
+DETERMINISTIC
+BEGIN
+	SET @delta_lat = end_lat - start_lat;
+    SET @delta_lon = end_lon - start_lon;
+    RETURN SQRT(POWER(@delta_lat, 2) + POWER(@delta_lon, 2));
+END;;
+DELIMITER ;
 
 
 DROP TRIGGER IF EXISTS logg_insert;
@@ -166,71 +198,63 @@ BEGIN
         SET @travel_cost = @price_per_min * @minutes_traveled;
         -- parking prices
         SET @parking_cost_station = 20;
-        SET @parking_cost_zone = 30;
+        SET @parking_cost_city = 30;
         SET @parking_cost_unallowed = 100;
+        -- discount for bringing scooter parked outside of city inside city
+        SET @bring_home_discount = 10;
         -- total cost
         SET @total_cost = 0;
         -- start points
         SET @start_lat = (SELECT start_lat FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1);
         SET @start_lon = (SELECT start_lon FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1);
 
-        -- 1 if started outside of zone, 0 if started within zone or at station
-        SET @started_outside_zone = (
+        -- 0 if started outside of associated city, 1 if started within city
+        SET @started_inside_city = (
             SELECT EXISTS (
-                SELECT * FROM station
+                SELECT * FROM city
                 WHERE
-                    -- not within allowed radius
-                    NOT ABS(NEW.lat_pos-lat_center) <= radius OR
-                    NOT ABS(NEW.lon_pos-lat_center) <= radius
+                    id = OLD.city_id
+                    AND calc_geo_dist(@start_lat, @start_lon, lat_center, lon_center) <= radius
             )
         );
 
-
-        -- PARKING AT A CHARGING STATION OR A ZONE
+        -- PARKING AT STATION AND/OR IN CITY ZONE
         --
-        -- check if parked at a STATION, sets 0 or 1
-        SET @ends_station = (
+        -- 0 if ended/parked at a 'station/parking zone', 1 if ended/parked outside of one
+        SET @ended_at_station = (
             SELECT EXISTS (
                 SELECT * FROM station
                 WHERE
-                    charge = 1 -- indicates station
-                AND
-                    ABS(NEW.lat_pos-lat_center) <= radius
-                AND
-                    ABS(NEW.lat_pos-lat_center) <= radius
+                    calc_geo_dist(@start_lat, @start_lon, lat_center, lon_center) <= radius
             )
 		);
-        -- check if parked within radius of any station but NOT at a station, sets 0 or 1
-        SET @ends_zone = (
+        -- 0 if ended outside of associated city, 1 if ended within city
+        SET @ended_inside_city = (
             SELECT EXISTS (
-                SELECT * FROM station
+                SELECT * FROM city
                 WHERE
-                    charge = 0 -- indicates zone
-                AND
-                    ABS(NEW.lat_pos-lat_center) <= radius
-                AND
-                    ABS(NEW.lon_pos-lat_center) <= radius
+                    id = OLD.city_id
+                    AND calc_geo_dist(NEW.lat_pos, NEW.lon_pos, lat_center, lon_center) <= radius
             )
         );
 
-
         -- PAYMENT
-        --
+        
         -- INVOICE
         IF (SELECT payment_terms FROM customer WHERE id = OLD.customer_id) = 'invoice' THEN
         -- if scooter was collected outside allowed zone and parked near charging station or zone, give discount
-            IF @started_outside_zone = 1 AND (@ends_station = 1 OR @ends_zone = 1) THEN
-                SET @start_cost = @start_cost - 10; -- 10 kr discount
+            IF @started_inside_city = 0 AND @ended_inside_city = 1 THEN
+                SET @start_cost = @start_cost - @bring_home_discount;
             END IF;
 
             -- if ending at a station, add station cost
-            IF @ends_station = 1 THEN
+            IF @ended_at_station = 1 THEN
                 SET @total_cost = @start_cost + @travel_cost + @parking_cost_station;
-            -- if ending in a zone but not at a station, add zone cost
-            ELSEIF @ends_zone = 1 THEN
-                SET @total_cost = @start_cost + @travel_cost + @parking_cost_zone;
+            -- if ending in city but not at a station, add city cost
+            ELSEIF @ended_inside_city = 1 THEN
+                SET @total_cost = @start_cost + @travel_cost + @parking_cost_city;
             -- if not ending within allowed zone, add unallowed (and expensive) parking cost
-            ELSEIF @ends_station = 0 AND @ends_zone = 0 THEN
+            ELSE
                 SET @total_cost = @start_cost + @travel_cost + @parking_cost_unallowed;
             END IF;
         -- -- AUTOGIRO
@@ -246,9 +270,9 @@ BEGIN
             end_time = NOW(),
             end_lat = NEW.lat_pos,
             end_lon = NEW.lon_pos,
-            total_cost = @start_cost
+            total_cost = @total_cost
         WHERE  -- find latest id (current travel log) with this customer
-            id = (SELECT * FROM(SELECT id FROM logg WHERE customer_id=OLD.customer_id ORDER BY id DESC LIMIT 1) AS l);
+            id = (SELECT * FROM (SELECT id FROM logg WHERE customer_id=OLD.customer_id ORDER BY id DESC LIMIT 1) AS l);
     END IF;
 END
 ;;

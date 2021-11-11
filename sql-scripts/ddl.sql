@@ -21,7 +21,7 @@ DROP VIEW IF EXISTS v_logg;
 CREATE TABLE adm
 (
     `id` INT NOT NULL AUTO_INCREMENT,
-    `username` CHAR(20),
+    `username` VARCHAR(20),
     `password` CHAR(255), -- https://www.php.net/manual/en/function.password-hash.php
 
     PRIMARY KEY (`id`)
@@ -34,7 +34,7 @@ ENGINE INNODB
 CREATE TABLE customer
 (
     `id` INT NOT NULL AUTO_INCREMENT,
-    `username` CHAR(20) UNIQUE,
+    `username` VARCHAR(20) UNIQUE,
     `password` CHAR(255),
     `funds` DECIMAL(7, 2) DEFAULT 0,
     `payment_terms` CHAR(10),
@@ -47,7 +47,7 @@ ENGINE INNODB
 CREATE TABLE city
 (
     `id` INT NOT NULL AUTO_INCREMENT,
-    `name` CHAR(20) NOT NULL UNIQUE,
+    `name` VARCHAR(20) NOT NULL UNIQUE,
     `lat_center` DECIMAL(9,6),
     `lon_center` DECIMAL(9,6),
     `radius` DECIMAL(9, 6),
@@ -61,7 +61,7 @@ CREATE TABLE station
 (
     `id` INT NOT NULL AUTO_INCREMENT,
     `city_id` INT,
-    `location` CHAR(20),
+    `location` VARCHAR(20),
     `lat_center` DECIMAL(9,6),
     `lon_center` DECIMAL(9,6),
     `radius` DECIMAL(9, 6) DEFAULT 0.002,
@@ -168,8 +168,8 @@ BEGIN
         ) THEN
         
         -- insert new entry into logg table user, scooter, start time, lat, lot
-        INSERT INTO logg (customer_id, scooter_id, start_time, start_lat, start_lon, total_cost)
-        VALUES (NEW.customer_id, NEW.id, NOW(), OLD.lat_pos, OLD.lon_pos, @start_cost);
+        INSERT INTO logg (customer_id, scooter_id, start_time, start_lat, start_lon)
+        VALUES (NEW.customer_id, NEW.id, NOW(), OLD.lat_pos, OLD.lon_pos);
 
 
     END IF;
@@ -198,7 +198,7 @@ BEGIN
         SET @travel_cost = @price_per_min * @minutes_traveled;
         -- parking prices
         SET @parking_cost_station = 20;
-        SET @parking_cost_city = 30;
+        SET @parking_cost_city = 40;
         SET @parking_cost_unallowed = 100;
         -- discount for bringing scooter parked outside of city inside city
         SET @bring_home_discount = 10;

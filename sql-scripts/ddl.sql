@@ -36,8 +36,7 @@ CREATE TABLE customer
     `id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(20) UNIQUE,
     `password` CHAR(255),
-    `funds` DECIMAL(7, 2) DEFAULT 1000,
-    `payment_terms` CHAR(10),
+    `funds` DECIMAL(7, 2) DEFAULT 0,
 
     PRIMARY KEY (`id`)
 )
@@ -106,6 +105,9 @@ CREATE TABLE logg
     `start_lon` DECIMAL(9,6),
     `end_lat` DECIMAL(9,6),
     `end_lon` DECIMAL(9,6),
+    `start_cost` INT DEFAULT 0,
+    `travel_cost` DECIMAL(7,2) DEFAULT 0,
+    `parking_cost` INT DEFAULT 0,
     `total_cost` DECIMAL(7, 2) DEFAULT 0,
 
     PRIMARY KEY (`id`),
@@ -123,13 +125,13 @@ ALTER TABLE adm AUTO_INCREMENT = 1;
 ALTER TABLE city AUTO_INCREMENT = 1;
 ALTER TABLE logg AUTO_INCREMENT = 1;
 
--- 
+--
 -- functions
 -- ----------------
 DELIMITER ;;
 -- Calculate distance in degrees between
 -- two geographical locations, based on their
--- lat-/longitudes (using Pythagora's theorem) 
+-- lat-/longitudes (using Pythagora's theorem)
 -- Note that this function
 -- assumes that the earth is 'flat', ie that
 -- one degree in 'latitudinal' direction is the same
@@ -166,7 +168,7 @@ BEGIN
         OLD.customer_id IS NULL AND
         NOT NEW.customer_id IS NULL
         ) THEN
-        
+
         -- insert new entry into logg table user, scooter, start time, lat, lot
         INSERT INTO logg (customer_id, scooter_id, start_time, start_lat, start_lon)
         VALUES (NEW.customer_id, NEW.id, NOW(), OLD.lat_pos, OLD.lon_pos);
@@ -196,10 +198,8 @@ BEGIN
         SET @start_time = (SELECT start_time FROM logg WHERE customer_id = OLD.customer_id ORDER BY id DESC LIMIT 1);
         SET @minutes_traveled = TIMESTAMPDIFF(MINUTE, @start_time, NOW());
         SET @travel_cost = @price_per_min * @minutes_traveled;
-        -- parking prices
-        SET @parking_cost_station = 20;
-        SET @parking_cost_city = 40;
-        SET @parking_cost_unallowed = 100;
+        -- parking price at a station
+        SET @parking_cost = 20;
         -- discount for bringing scooter parked outside of city inside city
         SET @bring_home_discount = 10;
         -- total cost
@@ -238,28 +238,25 @@ BEGIN
             )
         );
 
-        -- PAYMENT
-        
-        -- INVOICE
-        IF (SELECT payment_terms FROM customer WHERE id = OLD.customer_id) = 'invoice' THEN
-        -- if scooter was collected outside allowed zone and parked near charging station or zone, give discount
-            IF @started_inside_city = 0 AND @ended_inside_city = 1 THEN
-                SET @start_cost = @start_cost - @bring_home_discount;
-            END IF;
+        -- TOTAL COST FOR SINGLE SCOOTER TRIP
+        --
 
-            -- if ending at a station, add station cost
-            IF @ended_at_station = 1 THEN
-                SET @total_cost = @start_cost + @travel_cost + @parking_cost_station;
-            -- if ending in city but not at a station, add city cost
-            ELSEIF @ended_inside_city = 1 THEN
-                SET @total_cost = @start_cost + @travel_cost + @parking_cost_city;
-            -- if not ending within allowed zone, add unallowed (and expensive) parking cost
-            ELSE
-                SET @total_cost = @start_cost + @travel_cost + @parking_cost_unallowed;
-            END IF;
-        -- -- AUTOGIRO
+        -- if scooter was collected outside allowed zone and parked near charging station or zone, give discount
+        IF @started_inside_city = 0 AND @ended_inside_city = 1 THEN
+            SET @start_cost = @start_cost - @bring_home_discount;
+        END IF;
+
+        -- if ending at a station, add normal parking cost
+        IF @ended_at_station = 1 THEN
+            SET @total_cost = @start_cost + @travel_cost + @parking_cost;
+        -- if ending in city but not at a station, add city cost
+        ELSEIF @ended_inside_city = 1 THEN
+            SET @parking_cost = @parking_cost + 20;
+            SET @total_cost = @start_cost + @travel_cost + (@parking_cost);
+        -- if not ending within allowed zone, add unallowed (and expensive) cost
         ELSE
-            SET @total_cost = 0;
+            SET @parking_cost = @parking_cost + 80;
+            SET @total_cost = @start_cost + @travel_cost + @parking_cost;
         END IF;
 
 
@@ -270,6 +267,9 @@ BEGIN
             end_time = NOW(),
             end_lat = NEW.lat_pos,
             end_lon = NEW.lon_pos,
+            start_cost = @start_cost,
+            travel_cost = @travel_cost,
+            parking_cost = @parking_cost,
             total_cost = @total_cost
         WHERE  -- find latest id (current travel log) with this customer
             id = (SELECT * FROM (SELECT id FROM logg WHERE customer_id=OLD.customer_id ORDER BY id DESC LIMIT 1) AS l);

@@ -36,7 +36,7 @@ CREATE TABLE customer
     `id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(20) UNIQUE,
     `password` CHAR(255),
-    `funds` DECIMAL(7, 2) DEFAULT 0,
+    `funds` DECIMAL(7, 2) DEFAULT 1000,
     `payment_terms` CHAR(10),
 
     PRIMARY KEY (`id`)
@@ -106,7 +106,7 @@ CREATE TABLE logg
     `start_lon` DECIMAL(9,6),
     `end_lat` DECIMAL(9,6),
     `end_lon` DECIMAL(9,6),
-    `total_cost` DECIMAL DEFAULT 0,
+    `total_cost` DECIMAL(7, 2) DEFAULT 0,
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),

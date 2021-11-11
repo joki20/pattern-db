@@ -27,6 +27,8 @@ CREATE TABLE adm
     PRIMARY KEY (`id`)
 )
 ENGINE INNODB
+-- CHARSET utf8mb4
+-- COLLATE utf8_swedish_ci
 ;
 
 CREATE TABLE customer
@@ -40,8 +42,6 @@ CREATE TABLE customer
     PRIMARY KEY (`id`)
 )
 ENGINE INNODB
--- CHARSET utf8mb4
--- COLLATE utf8_swedish_ci
 ;
 
 CREATE TABLE city
@@ -220,7 +220,7 @@ BEGIN
 
         -- PARKING AT STATION AND/OR IN CITY ZONE
         --
-        -- 0 if ended/parked at a 'station/parking zone', 1 if ended/parked outside of one
+        -- 0 if ended/parked outside of 'station/parking zone', 1 if ended/parked within
         SET @ended_at_station = (
             SELECT EXISTS (
                 SELECT * FROM station

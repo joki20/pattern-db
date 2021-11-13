@@ -1,6 +1,11 @@
 SET NAMES 'utf8';
 -- CREATE DATABASE
 DROP DATABASE IF EXISTS sctr;
+-- set root password
+ALTER USER 'root'@'localhost'
+IDENTIFIED WITH caching_sha2_password
+BY 'fstr_hrdr_sctr';
+
 CREATE DATABASE sctr CHARACTER SET utf8mb4 COLLATE utf8mb4_swedish_ci;
 
 -- USE DATABASE

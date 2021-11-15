@@ -65,7 +65,7 @@ CREATE TABLE station
     `lat_center` DECIMAL(9,6),
     `lon_center` DECIMAL(9,6),
     `radius` DECIMAL(9, 6) DEFAULT 0.002,
-    `charge` BOOLEAN NOT NULL DEFAULT 1, -- true
+    `type` ENUM('charge','park') DEFAULT 'charge',
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`city_id`) REFERENCES `city` (`id`)
@@ -126,6 +126,7 @@ ALTER TABLE adm AUTO_INCREMENT = 1;
 ALTER TABLE city AUTO_INCREMENT = 1;
 ALTER TABLE logg AUTO_INCREMENT = 1;
 
+
 --
 -- functions
 -- ----------------
@@ -154,7 +155,6 @@ BEGIN
     RETURN SQRT(POWER(@delta_lat, 2) + POWER(@delta_lon, 2));
 END;;
 DELIMITER ;
-
 
 DROP TRIGGER IF EXISTS logg_insert;
 DROP TRIGGER IF EXISTS logg_update;

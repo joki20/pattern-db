@@ -14,9 +14,9 @@ DELETE FROM city WHERE id > 0;
 DELETE FROM station WHERE id > 0;
 DELETE FROM logg WHERE id > 0;
 
-------------------
+-- ---------------
 -- ADMIN TABLE  --
-------------------
+-- ---------------
 
 INSERT INTO
     adm (username, password)

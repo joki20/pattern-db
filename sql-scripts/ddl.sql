@@ -27,8 +27,6 @@ CREATE TABLE adm
     PRIMARY KEY (`id`)
 )
 ENGINE INNODB
-CHARSET latin1
-COLLATE latin1_swedish_ci
 ;
 
 CREATE TABLE customer
@@ -42,8 +40,6 @@ CREATE TABLE customer
     PRIMARY KEY (`id`)
 )
 ENGINE INNODB
-CHARSET latin1
-COLLATE latin1_swedish_ci
 ;
 
 CREATE TABLE city
@@ -57,8 +53,6 @@ CREATE TABLE city
     PRIMARY KEY (`id`)
 )
 ENGINE INNODB
-CHARSET latin1
-COLLATE latin1_swedish_ci
 ;
 
 CREATE TABLE station
@@ -75,8 +69,6 @@ CREATE TABLE station
     FOREIGN KEY (`city_id`) REFERENCES `city` (`id`)
 )
 ENGINE INNODB
-CHARSET latin1
-COLLATE latin1_swedish_ci
 ;
 
 CREATE TABLE scooter
@@ -98,8 +90,6 @@ CREATE TABLE scooter
     FOREIGN KEY (`station_id`) REFERENCES `station` (`id`)
 )
 ENGINE INNODB
-CHARSET latin1
-COLLATE latin1_swedish_ci
 ;
 
 CREATE TABLE logg
@@ -123,8 +113,6 @@ CREATE TABLE logg
     FOREIGN KEY (`scooter_id`) REFERENCES `scooter` (`id`)
 )
 ENGINE INNODB
-CHARSET latin1
-COLLATE latin1_swedish_ci
 ;
 
 

@@ -27,8 +27,8 @@ CREATE TABLE adm
     PRIMARY KEY (`id`)
 )
 ENGINE INNODB
--- CHARSET utf8mb4
--- COLLATE utf8_swedish_ci
+CHARSET utf8
+COLLATE utf8_swedish_ci
 ;
 
 CREATE TABLE customer
@@ -42,6 +42,8 @@ CREATE TABLE customer
     PRIMARY KEY (`id`)
 )
 ENGINE INNODB
+CHARSET utf8
+COLLATE utf8_swedish_ci
 ;
 
 CREATE TABLE city
@@ -55,6 +57,8 @@ CREATE TABLE city
     PRIMARY KEY (`id`)
 )
 ENGINE INNODB
+CHARSET utf8
+COLLATE utf8_swedish_ci
 ;
 
 CREATE TABLE station
@@ -71,6 +75,8 @@ CREATE TABLE station
     FOREIGN KEY (`city_id`) REFERENCES `city` (`id`)
 )
 ENGINE INNODB
+CHARSET utf8
+COLLATE utf8_swedish_ci
 ;
 
 CREATE TABLE scooter
@@ -79,13 +85,12 @@ CREATE TABLE scooter
     `customer_id` INT DEFAULT NULL,
     `city_id` INT,
     `station_id` INT,
-    `rented` BOOLEAN DEFAULT 0, -- false
     `lat_pos` DECIMAL(9,6),
     `lon_pos` DECIMAL(9,6),
-    `maintenance_mode` BOOLEAN DEFAULT 0, -- false
     `active` BOOLEAN DEFAULT 1, -- true
     `speed_kph` INT DEFAULT 0,
     `battery_level` INT DEFAULT 100,
+    `status` ENUM('active', 'inactive', 'maintenance') DEFAULT 'active',
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
@@ -93,6 +98,8 @@ CREATE TABLE scooter
     FOREIGN KEY (`station_id`) REFERENCES `station` (`id`)
 )
 ENGINE INNODB
+CHARSET utf8
+COLLATE utf8_swedish_ci
 ;
 
 CREATE TABLE logg
@@ -116,6 +123,8 @@ CREATE TABLE logg
     FOREIGN KEY (`scooter_id`) REFERENCES `scooter` (`id`)
 )
 ENGINE INNODB
+CHARSET utf8
+COLLATE utf8_swedish_ci
 ;
 
 

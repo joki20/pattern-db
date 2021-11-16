@@ -1,0 +1,47 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+    # using 'double mysql images' here because circleCI did something odd when
+    # only one was used, meaning the created 'primary container' did not
+    # launch the mysql daemon as expected. attempting to use a non-mysql
+    # image for the primary container led to a rabbit hole of issues
+    # with getting the right mysql client in place along with all required
+    # dependencies
+      - image: mysql:latest
+      - image: mysql:latest
+        environment:
+          MYSQL_ROOT_PASSWORD: fstr_hrdr_sctr
+    # can't set working directory (~/pattern-db/sql-scripts/) properly at start,
+    # because this appears to create a conflict with git/checkout
+    working_directory: ~/
+    steps:
+      - run: apt-get update && apt-get install -y git ssh
+      - checkout:
+          path: ~/pattern-db
+      # install wget, since circleci image doesn't include it (in fact, the only difference
+      # between circleci's mysql image and the base mysql image seems to be a few environment
+      # variables)
+      - run:
+          name: install wget
+          command: apt-get update && apt-get install wget -y
+      # dockerize installation instruction from https://circleci.com/docs/2.0/databases/
+      # except using a specific version of Dockerize rather than using on environment variable
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-alpine-linux-amd64-v0.6.1.tar.gz && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-v0.6.1.tar.gz && rm dockerize-alpine-linux-amd64-v0.6.1.tar.gz
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://127.0.0.1:3306 -timeout 30s
+      # run database setup, DDL and DML/insert scripts
+      - run: cd ~/pattern-db/sql-scripts/ && mysql -h 127.0.0.1 -uroot -pfstr_hrdr_sctr --local-infile=1 < setup.sql
+      - run: cd ~/pattern-db/sql-scripts/ && mysql -h 127.0.0.1 -uroot -pfstr_hrdr_sctr --local-infile=1 < ddl.sql
+      - run: cd ~/pattern-db/sql-scripts/ && mysql -h 127.0.0.1 -uroot -pfstr_hrdr_sctr --local-infile=1 < insert.sql
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  test_if_build_succeeds:
+    jobs:
+      - build

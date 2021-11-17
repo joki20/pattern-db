@@ -48,7 +48,7 @@ CREATE TABLE city
     `name` VARCHAR(20) NOT NULL UNIQUE,
     `lat_center` DECIMAL(9,6),
     `lon_center` DECIMAL(9,6),
-    `radius` DECIMAL(9, 6),
+    `radius` DECIMAL(3, 1),
 
     PRIMARY KEY (`id`)
 )
@@ -62,7 +62,7 @@ CREATE TABLE station
     `location` VARCHAR(20),
     `lat_center` DECIMAL(9,6),
     `lon_center` DECIMAL(9,6),
-    `radius` DECIMAL(9, 6) DEFAULT 0.002,
+    `radius` DECIMAL(4, 3) DEFAULT 0.002,
     `type` ENUM('charge','park') DEFAULT 'charge',
 
     PRIMARY KEY (`id`),
@@ -103,9 +103,9 @@ CREATE TABLE logg
     `start_lon` DECIMAL(9,6),
     `end_lat` DECIMAL(9,6),
     `end_lon` DECIMAL(9,6),
-    `start_cost` INT DEFAULT 0,
+    `start_cost` DECIMAL(7, 2) DEFAULT 0,
     `travel_cost` DECIMAL(7,2) DEFAULT 0,
-    `parking_cost` INT DEFAULT 0,
+    `parking_cost` DECIMAL(7, 2) DEFAULT 0,
     `total_cost` DECIMAL(7, 2) DEFAULT 0,
 
     PRIMARY KEY (`id`),

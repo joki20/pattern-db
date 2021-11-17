@@ -81,7 +81,7 @@ FIELDS
 LINES
     TERMINATED BY '\n'
 IGNORE 1 LINES -- ignores header
-(id, customer_id, station_id, lat_pos, lon_pos, speed_kph, battery_level, status) -- specify insert columns
+(id, customer_id, city_id, station_id, lat_pos, lon_pos, active, speed_kph, battery_level, status) -- specify insert columns
 ;
 --
 -- -- INSERT INTO

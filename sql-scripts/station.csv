@@ -1,31 +1,31 @@
-id,city_id,location,lat_center,lon_center,radius,charge
-1,1,Arena Skövde,58.393154,13.8380477,0.002,charge
-2,1,Sjukhuset,58.4072554,13.8248402,0.002,charge
-3,1,Circle K,58.3904521,13.8345447,0.002,charge
-4,1,Kavelbro Gymnasium,58.3843895,13.8611324,0.002,charge
-5,1,Elins Esplanad,58.406094,13.8517893,0.002,charge
-6,1,Thai House,58.3942659,13.8572396,0.002,park
-7,1,Vasaskolan,58.383956,13.8316208,0.002,park
-8,1,Södermalms IP,58.3779712,13.8344532,0.002,park
-9,1,Golfklubben,58.3788262,13.8179737,0.002,park
-10,1,Balthazar,58.3901513,13.8512227,0.002,park
-11,2,Victoriastadion,55.7048954,13.1770515,0.002,charge
-12,2,Värpinge By,55.7010352,13.1662741,0.002,charge
-13,2,Nova Lund,55.7104566,13.1277847,0.002,charge
-14,2,Jakt & Friluftsgården,55.6873361,13.1973075,0.002,charge
-15,2,Skånes universitetssjukhus,55.7126849,13.1878189,0.002,charge
-16,2,Kungsmarken,55.703106,13.1883811,0.002,park
-17,2,Ica Nära Jägaren,55.7209966,13.1475257,0.002,park
-18,2,Stadsparken,55.6950767,13.1856345,0.002,park
-19,2,Klostergårdens IP,55.6981726,13.1904571,0.002,park
-20,2,Nöbbelövs mosse,55.7215324,13.1500534,0.002,park
-21,3,IKEA,59.8594187,17.6175852,0.002,charge
-22,3,Ica Maxi Stenhagen,59.852781,17.6174135,0.002,charge
-23,3,IFU Arena,59.8746287,17.6260824,0.002,charge
-24,3,Linnéträdgården,59.8713977,17.6074572,0.002,charge
-25,3,SLU,59.8330325,17.6666804,0.002,charge
-26,3,Klättercentret,59.8514447,17.6693411,0.002,park
-27,3,Gränbystaden,59.8562293,17.6723452,0.002,park
-28,3,Ångströmlaboratoriet,59.8516602,17.6191301,0.002,park
-29,3,Gamla Uppsala,59.893473,17.6002188,0.002,park
-30,3,Bergsbrunnaparken,59.8212918,17.6953749,0.002,park
+id,city_id,location,lat_center,lon_center,radius,type
+1,1,Arena Skövde,"58,393154","13,8380477","0,002",charge
+2,1,Sjukhuset,"58,4072554","13,8248402","0,002",charge
+3,1,Circle K,"58,3904521","13,8345447","0,002",charge
+4,1,Kavelbro Gymnasium,"58,3843895","13,8611324","0,002",charge
+5,1,Elins Esplanad,"58,406094","13,8517893","0,002",charge
+6,1,Thai House,"58,3942659","13,8572396","0,002",park
+7,1,Vasaskolan,"58,383956","13,8316208","0,002",park
+8,1,Södermalms IP,"58,3779712","13,8344532","0,002",park
+9,1,Golfklubben,"58,3788262","13,8179737","0,002",park
+10,1,Balthazar,"58,3901513","13,8512227","0,002",park
+11,2,Victoriastadion,"55,7048954","13,1770515","0,002",charge
+12,2,Värpinge By,"55,7010352","13,1662741","0,002",charge
+13,2,Nova Lund,"55,7104566","13,1277847","0,002",charge
+14,2,Jakt & Friluftsgården,"55,6873361","13,1973075","0,002",charge
+15,2,Skånes universitetssjukhus,"55,7126849","13,1878189","0,002",charge
+16,2,Kungsmarken,"55,703106","13,1883811","0,002",park
+17,2,Ica Nära Jägaren,"55,7209966","13,1475257","0,002",park
+18,2,Stadsparken,"55,6950767","13,1856345","0,002",park
+19,2,Klostergårdens IP,"55,6981726","13,1904571","0,002",park
+20,2,Nöbbelövs mosse,"55,7215324","13,1500534","0,002",park
+21,3,IKEA,"59,8594187","17,6175852","0,002",charge
+22,3,Ica Maxi Stenhagen,"59,852781","17,6174135","0,002",charge
+23,3,IFU Arena,"59,8746287","17,6260824","0,002",charge
+24,3,Linnéträdgården,"59,8713977","17,6074572","0,002",charge
+25,3,SLU,"59,8330325","17,6666804","0,002",charge
+26,3,Klättercentret,"59,8514447","17,6693411","0,002",park
+27,3,Gränbystaden,"59,8562293","17,6723452","0,002",park
+28,3,Ångströmlaboratoriet,"59,8516602","17,6191301","0,002",park
+29,3,Gamla Uppsala,"59,893473","17,6002188","0,002",park
+30,3,Bergsbrunnaparken,"59,8212918","17,6953749","0,002",park

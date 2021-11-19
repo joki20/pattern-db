@@ -79,7 +79,6 @@ CREATE TABLE scooter
     `station_id` INT,
     `lat_pos` DECIMAL(9,6),
     `lon_pos` DECIMAL(9,6),
-    `active` BOOLEAN DEFAULT 1, -- true
     `speed_kph` INT DEFAULT 0,
     `battery_level` INT DEFAULT 100,
     `status` ENUM('active', 'inactive', 'maintenance') DEFAULT 'active',

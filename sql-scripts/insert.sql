@@ -72,7 +72,7 @@ IGNORE 1 LINES -- ignores header
 -- ------------------
 
 -- Add SQL to LOAD DATA LOCAL INFILE
-LOAD DATA LOCAL INFILE 'scooter_skovde.csv'
+LOAD DATA LOCAL INFILE 'scooter.csv'
 INTO TABLE scooter
 CHARSET latin1
 FIELDS
@@ -83,6 +83,7 @@ LINES
 IGNORE 1 LINES -- ignores header
 (id, customer_id, city_id, station_id, lat_pos, lon_pos, speed_kph, battery_level) -- specify insert columns. Column 'status' is default 'active', so don't specify here
 ;
+
 --
 -- -- INSERT INTO
 -- --     scooter (city_id, battery_level, speed_kph, lat_pos,

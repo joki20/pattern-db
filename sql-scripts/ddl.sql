@@ -188,6 +188,7 @@ BEGIN
         NOT OLD.customer_id IS NULL AND
         NEW.customer_id IS NULL
         ) THEN
+        SET @scooter_id = (SELECT id FROM scooter WHERE NOT OLD.customer_id IS NULL AND NEW.customer_id IS NULL);
         -- start cost
         SET @start_cost = 20;
         -- travelling cost
@@ -238,7 +239,18 @@ BEGIN
         -- TOTAL COST FOR SINGLE SCOOTER TRIP
         --
 
+        -- station id if ended within station
+        SET @station_id_if_at_station = 0;
+        IF @ended_at_station = 1 THEN
+            SET @station_id_if_at_station = (
+                SELECT id FROM station
+                WHERE calc_geo_dist(@start_lat, @start_lon, lat_center, lon_center) <= radius
+            );
+        END IF;
+
         -- if scooter was collected outside allowed zone and parked near charging station or zone, give discount
+        IF $ended_inside_city = 1 THEN
+
         IF @started_inside_city = 0 AND @ended_inside_city = 1 THEN
             SET @start_cost = @start_cost - @bring_home_discount;
         END IF;
@@ -246,6 +258,15 @@ BEGIN
         -- if ending at a station, add normal parking cost
         IF @ended_at_station = 1 THEN
             SET @total_cost = @start_cost + @travel_cost + @parking_cost;
+
+            -- position scooter at this station
+            UPDATE scooter
+            SET
+                station_id = @station_id_if_at_station
+            WHERE
+                id = @scooter_id;
+		END IF;
+
         -- if ending in city but not at a station, add city cost
         ELSEIF @ended_inside_city = 1 THEN
             SET @parking_cost = @parking_cost + 20;

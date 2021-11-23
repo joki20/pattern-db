@@ -35,7 +35,7 @@ VALUES
     ('fahlstrm', 'frida', 1000.0, 'invoice'),
     ('datalowe', 'lowe', 300.0, 'prepaid'),
     ('joki20', 'johan', 450.0, 'invoice'),
-    ('mosbth', 'mikael', 4600.0, 'prepaid');
+    ('mosbth', 'mikael', 460.0, 'prepaid');
 
 
 -- ------------------

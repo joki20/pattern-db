@@ -33,7 +33,7 @@ CREATE TABLE customer
 (
     `id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(20) UNIQUE,
-    `password` CHAR(255),
+    `token` VARCHAR(200),
     `funds` DECIMAL(7, 2) DEFAULT 0,
     `payment_terms` ENUM('invoice','prepaid') DEFAULT 'invoice',
 

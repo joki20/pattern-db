@@ -29,13 +29,13 @@ VALUES
 -- ------------------
 
 INSERT INTO
-    customer (username, password, funds, payment_terms)
+    customer (username, funds, payment_terms)
 VALUES
-    ('jannikarlsson', 'janni', 200.0, 'prepaid'),
-    ('fahlstrm', 'frida', 1000.0, 'invoice'),
-    ('datalowe', 'lowe', 300.0, 'prepaid'),
-    ('joki20', 'johan', 450.0, 'invoice'),
-    ('mosbth', 'mikael', 600.0, 'prepaid');
+    ('jannikarlsson', 200.0, 'prepaid'),
+    ('fahlstrm', 1000.0, 'invoice'),
+    ('datalowe', 300.0, 'prepaid'),
+    ('joki20', 450.0, 'invoice'),
+    ('mosbth', 600.0, 'prepaid');
 
 
 -- ------------------

@@ -31,10 +31,11 @@ VALUES
 INSERT INTO
     customer (username, password, funds, payment_terms)
 VALUES
-    ('janni', 'janni', 200.0, 'prepaid'),
-    ('ahlstrm', 'frida', 1000.0, 'invoice'),
+    ('jannikarlsson', 'janni', 200.0, 'prepaid'),
+    ('fahlstrm', 'frida', 1000.0, 'invoice'),
     ('datalowe', 'lowe', 300.0, 'prepaid'),
-    ('jokris', 'johan', 450.0, 'invoice');
+    ('joki20', 'johan', 450.0, 'invoice'),
+    ('mosbth', 'mikael', 4600.0, 'prepaid');
 
 
 -- ------------------

@@ -281,7 +281,7 @@ BEGIN
             SET
                 funds = funds - @total_cost
             WHERE
-                id = (SELECT id FROM customer WHERE id = OLD.customer_id);
+                id = (SELECT * FROM (SELECT id FROM customer WHERE id = OLD.customer_id LIMIT 1) AS l);
         END IF;
     END IF;
 END

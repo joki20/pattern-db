@@ -22,7 +22,7 @@ CREATE TABLE adm
 (
     `id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(20),
-    `password` CHAR(255), -- https://www.php.net/manual/en/function.password-hash.php
+    `token` VARCHAR(200) DEFAULT NULL,
 
     PRIMARY KEY (`id`)
 )
@@ -33,7 +33,7 @@ CREATE TABLE customer
 (
     `id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(20) UNIQUE,
-    `token` VARCHAR(200),
+    `token` VARCHAR(200) DEFAULT NULL,
     `funds` DECIMAL(7, 2) DEFAULT 0,
     `payment_terms` ENUM('invoice','prepaid') DEFAULT 'invoice',
 

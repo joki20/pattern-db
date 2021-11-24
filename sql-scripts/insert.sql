@@ -19,9 +19,14 @@ DELETE FROM logg WHERE id > 0;
 -- ---------------
 
 INSERT INTO
-    adm (username, password)
+    adm (username)
 VALUES
-    ('admin', 'password');
+    ('jannikarlsson'),
+    ('fahlstrm'),
+    ('datalowe'),
+    ('joki20'),
+    ('mosbth')
+;
 
 
 -- ------------------
@@ -35,7 +40,8 @@ VALUES
     ('fahlstrm', 1000.0, 'invoice'),
     ('datalowe', 300.0, 'prepaid'),
     ('joki20', 450.0, 'invoice'),
-    ('mosbth', 600.0, 'prepaid');
+    ('mosbth', 600.0, 'prepaid')
+;
 
 
 -- ------------------

@@ -270,6 +270,19 @@ BEGIN
             total_cost = @total_cost
         WHERE  -- find latest id (current travel log) with this customer
             id = (SELECT * FROM (SELECT id FROM logg WHERE customer_id=OLD.customer_id ORDER BY id DESC LIMIT 1) AS l);
+
+
+        -- IF USER HAS PREPAID, HANDLE PAYMENT AUTOMATICALLY
+        --
+        SET @payment_choice = (SELECT payment_terms FROM customer WHERE id = OLD.customer_id);
+
+        IF @payment_choice = 'prepaid' THEN
+            UPDATE customer
+            SET
+                funds = funds - @total_cost
+            WHERE
+                id = (SELECT id FROM customer WHERE id = OLD.customer_id);
+        END IF;
     END IF;
 END
 ;;

@@ -1,6 +1,7 @@
 USE sctr; -- choose database (needed for MySQL Docker containers)
 -- All code with tables, views, procedures, triggers, and so on.
 -- DROP TABLES, START WITH FOREIGN KEYS TO ELIMINATE DEPENDENCIES
+DROP TABLE IF EXISTS apikeys;
 DROP TABLE IF EXISTS logg;
 DROP TABLE IF EXISTS scooter;
 DROP TABLE IF EXISTS station;
@@ -16,6 +17,13 @@ DROP TRIGGER IF EXISTS logg_update;
 
 DROP VIEW IF EXISTS v_logg;
 
+
+CREATE TABLE IF NOT EXISTS apikeys
+    `client` VARCHAR(20),
+    `key` VARCHAR(64) NOT NULL,
+
+    PRIMARY KEY (`key`)
+);
 
 
 CREATE TABLE adm
@@ -35,7 +43,7 @@ CREATE TABLE customer
     `username` VARCHAR(20) UNIQUE,
     `token` VARCHAR(200) DEFAULT NULL,
     `funds` DECIMAL(7, 2) DEFAULT 0,
-    `payment_terms` ENUM('invoice','prepaid') DEFAULT 'invoice',
+    `payment_terms` ENUM('invoice','prepaid'), DEFAULT 'invoice',
 
     PRIMARY KEY (`id`)
 )

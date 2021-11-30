@@ -7,12 +7,33 @@ SHOW VARIABLES LIKE 'local_infile';
 
 -- Empty all tables
 --
+DELETE FROM apikeys WHERE key <> 0;
 DELETE FROM scooter WHERE id > 0;
 DELETE FROM customer WHERE id > 0;
 DELETE FROM adm WHERE id > 0;
 DELETE FROM city WHERE id > 0;
 DELETE FROM station WHERE id > 0;
 DELETE FROM logg WHERE id > 0;
+
+
+-- ---------------
+-- APIKEYS TABLE  --
+-- ---------------
+
+INSERT INTO
+    apikeys (client, key)
+VALUES
+    ('customerwebb', '3676397924422645'),
+    ('customerapp', '703273357638792F'),
+    ('adminwebb', '556A586E32723575'),
+    ('scooterclient', '635166546A576E5A'),
+    (null, '3272357538782141'),
+    (null, '6A576E5A72347537'),
+    (null, '51655468576D5A71'),
+    (null, '2B4B625065536856'),
+    (null, '442A472D4B615064')
+;
+
 
 -- ---------------
 -- ADMIN TABLE  --

@@ -7,7 +7,7 @@ SHOW VARIABLES LIKE 'local_infile';
 
 -- Empty all tables
 --
-DELETE FROM apikeys WHERE key <> 0;
+-- DELETE FROM apikeys WHERE key != 0;
 DELETE FROM scooter WHERE id > 0;
 DELETE FROM customer WHERE id > 0;
 DELETE FROM adm WHERE id > 0;
@@ -21,7 +21,7 @@ DELETE FROM logg WHERE id > 0;
 -- ---------------
 
 INSERT INTO
-    apikeys (client, key)
+    apikeys (client, apikey)
 VALUES
     ('customerwebb', '3676397924422645'),
     ('customerapp', '703273357638792F'),
@@ -74,7 +74,8 @@ INSERT INTO
 VALUES
     ('Skövde', 58.3941248, 13.85349067, 5),
     ('Lund', 55.7106955, 13.2013123, 2),
-    ('Uppsala', 59.8615337, 17.6543391, 5);
+    ('Uppsala', 59.8615337, 17.6543391, 5)
+;
 
 
 -- ------------------
@@ -112,9 +113,20 @@ IGNORE 1 LINES -- ignores header
 (id, customer_id, city_id, station_id, lat_pos, lon_pos, speed_kph, battery_level) -- specify insert columns. Column 'status' is default 'active', so don't specify here
 ;
 
---
--- -- INSERT INTO
--- --     scooter (city_id, battery_level, speed_kph, lat_pos,
--- --     lon_pos)
--- -- VALUES
--- --     (1, 90, 0, 55.6004584, 13.0083306);
+
+-- ------------------
+-- LOGG TABLE  --
+-- ------------------
+
+-- Add SQL to LOAD DATA LOCAL INFILE
+LOAD DATA LOCAL INFILE 'logg.csv'
+INTO TABLE logg
+CHARSET latin1
+FIELDS
+    TERMINATED BY ',' -- for multiple columns
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1 LINES -- ignores header
+(id, customer_id, scooter_id, start_time, end_time, start_lat, start_lon, end_lat, end_lon, start_cost, travel_cost, parking_cost, total_cost) -- specify insert columns.
+;

@@ -19,11 +19,14 @@ DROP VIEW IF EXISTS v_logg;
 
 
 CREATE TABLE apikeys
-    `client` VARCHAR(20),
-    `key` VARCHAR(64) DEFAULT NULL,
+(
+    `client` VARCHAR(100),
+    `apikey` VARCHAR(64) UNIQUE,
 
-    PRIMARY KEY (`key`)
-);
+    PRIMARY KEY (`apikey`)
+)
+ENGINE INNODB
+;
 
 
 CREATE TABLE adm
@@ -43,7 +46,7 @@ CREATE TABLE customer
     `username` VARCHAR(20) UNIQUE,
     `token` VARCHAR(200) DEFAULT NULL,
     `funds` DECIMAL(7, 2) DEFAULT 0,
-    `payment_terms` ENUM('invoice','prepaid'), DEFAULT 'invoice',
+    `payment_terms` ENUM('invoice','prepaid') DEFAULT 'invoice',
 
     PRIMARY KEY (`id`)
 )

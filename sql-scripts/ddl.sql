@@ -88,7 +88,7 @@ CREATE TABLE scooter
     `lat_pos` DECIMAL(9,6),
     `lon_pos` DECIMAL(9,6),
     `speed_kph` INT DEFAULT 0,
-    `battery_level` INT DEFAULT 100,
+    `battery_level` DECIMAL(5,2) DEFAULT 100,
     `status` ENUM('active', 'inactive', 'maintenance') DEFAULT 'active',
 
     PRIMARY KEY (`id`),

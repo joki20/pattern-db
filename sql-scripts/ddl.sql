@@ -18,9 +18,9 @@ DROP TRIGGER IF EXISTS logg_update;
 DROP VIEW IF EXISTS v_logg;
 
 
-CREATE TABLE IF NOT EXISTS apikeys
+CREATE TABLE apikeys
     `client` VARCHAR(20),
-    `key` VARCHAR(64) NOT NULL,
+    `key` VARCHAR(64) DEFAULT NULL,
 
     PRIMARY KEY (`key`)
 );

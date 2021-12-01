@@ -290,7 +290,8 @@ BEGIN
         IF @payment_choice = 'prepaid' THEN
             UPDATE customer
             SET
-                funds = funds - @total_cost
+                funds = funds - @total_cost,
+                payment_terms = IF(funds - @total_cost < 0, "invoice", field)
             WHERE
                 id = (SELECT * FROM (SELECT id FROM customer WHERE id = OLD.customer_id LIMIT 1) AS l);
         END IF;

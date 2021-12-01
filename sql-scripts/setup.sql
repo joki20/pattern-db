@@ -7,6 +7,7 @@ IDENTIFIED WITH caching_sha2_password
 BY 'fstr_hrdr_sctr';
 
 CREATE DATABASE sctr CHARACTER SET utf8mb4 COLLATE utf8mb4_swedish_ci;
+CREATE DATABASE test_sctr CHARACTER SET utf8mb4 COLLATE utf8mb4_swedish_ci;
 
 -- USE DATABASE
 SHOW DATABASES LIKE "%sctr%"; -- show databases containing word 'scooter'

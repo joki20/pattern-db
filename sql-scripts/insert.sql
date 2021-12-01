@@ -54,14 +54,17 @@ VALUES
 -- CUSTOMER TABLE --
 -- ------------------
 
-INSERT INTO
-    customer (username, funds, payment_terms)
-VALUES
-    ('jannikarlsson', 200.0, 'prepaid'),
-    ('fahlstrm', 1000.0, 'invoice'),
-    ('datalowe', 300.0, 'prepaid'),
-    ('joki20', 450.0, 'invoice'),
-    ('mosbth', 600.0, 'prepaid')
+-- Add SQL to LOAD DATA LOCAL INFILE
+LOAD DATA LOCAL INFILE 'customer.csv'
+INTO TABLE customer
+CHARSET latin1
+FIELDS
+    TERMINATED BY ',' -- for multiple columns
+    ENCLOSED BY '"'
+LINES
+    TERMINATED BY '\n'
+IGNORE 1 LINES -- ignores header
+(id, username, token, funds, payment_terms) -- specify insert columns
 ;
 
 

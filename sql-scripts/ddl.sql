@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS adm;
 
 -- drop functions
+DROP FUNCTION IF EXISTS deg_to_rad;
 DROP FUNCTION IF EXISTS calc_geo_dist;
 
 DROP TRIGGER IF EXISTS logg_insert;
@@ -138,28 +139,41 @@ ALTER TABLE logg AUTO_INCREMENT = 1;
 -- functions
 -- ----------------
 DELIMITER ;;
--- Calculate distance in degrees between
--- two geographical locations, based on their
--- lat-/longitudes (using Pythagora's theorem)
--- Note that this function
--- assumes that the earth is 'flat', ie that
--- one degree in 'latitudinal' direction is the same
--- as one degree in 'longitudinal' direction regardless
--- of where the points are located on Earth, so don't
--- rely on it for calculating longer distances or truly
--- critical calculations.
+-- Convert an angle in degrees to radians
+CREATE FUNCTION deg_to_rad(
+	angle_degrees DECIMAL(9, 6)
+)
+RETURNS FLOAT
+DETERMINISTIC
+BEGIN
+    RETURN angle_degrees / 180 * PI();
+END;;
+DELIMITER ;
+
+DELIMITER ;;
+-- Given a start/end point, returns 'as-the-crow-flies' distance in kilometers,
+-- based on the Haversine formula. (https://www.movable-type.co.uk/scripts/latlong.html)
 CREATE FUNCTION calc_geo_dist(
 	start_lat DECIMAL(9, 6),
     start_lon DECIMAL(9, 6),
     end_lat DECIMAL(9, 6),
     end_lon DECIMAL(9, 6)
 )
-RETURNS INT
+RETURNS FLOAT
 DETERMINISTIC
 BEGIN
-	SET @delta_lat = end_lat - start_lat;
-    SET @delta_lon = end_lon - start_lon;
-    RETURN SQRT(POWER(@delta_lat, 2) + POWER(@delta_lon, 2));
+    SET @EARTH_RADIUS_KM = 6371;
+    SET @start_lat_r = deg_to_rad(start_lat);
+    SET @start_lon_r = deg_to_rad(start_lon);
+    SET @end_lat_r = deg_to_rad(end_lat);
+    SET @end_lon_r = deg_to_rad(end_lon);
+    SET @d_lat_r = @end_lat_r - @start_lat_r;
+    SET @d_lon_r = @end_lon_r - @start_lon_r;
+    SET @a_term1 = POWER(SIN(@d_lat_r / 2), 2);
+    SET @a_term2 = COS(@start_lat_r) * COS(@end_lat_r) * POWER(SIN(@d_lon_r / 2), 2);
+    SET @a = @a_term1 + @a_term2;
+    SET @c = 2 * ATAN2(SQRT(@a), SQRT(1-@a));
+    RETURN @EARTH_RADIUS_KM * @c;
 END;;
 DELIMITER ;
 

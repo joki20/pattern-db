@@ -8,7 +8,6 @@ UPDATE
 	scooter
 SET
 	customer_id=1,
-    rented=1,
     speed_kph=25
 WHERE
 	id=1;
@@ -18,7 +17,6 @@ UPDATE
 	scooter
 SET
 	customer_id = NULL,
-    rented=0,
     speed_kph=0,
     lat_pos=55.608061,
     lon_pos=12.996175
@@ -31,7 +29,6 @@ UPDATE
 	scooter
 SET
 	customer_id=2,
-    rented=1,
     speed_kph=25
 WHERE
 	id=1;
@@ -42,7 +39,6 @@ UPDATE
 	scooter
 SET
 	customer_id = NULL,
-    rented=0,
     speed_kph=0,
     lat_pos=55.608065,
     lon_pos=12.996179
@@ -54,7 +50,6 @@ UPDATE
 	scooter
 SET
 	customer_id=2,
-    rented=1,
     speed_kph=25
 WHERE
 	id=1;
@@ -66,10 +61,9 @@ UPDATE
 	scooter
 SET
 	customer_id = NULL,
-    rented=0,
     speed_kph=0,
-    lat_pos=58.1815656,
-    lon_pos=13.9546127
+    lat_pos=58.394125,
+    lon_pos=13.853491
 WHERE
 	id=1;
 
@@ -80,7 +74,6 @@ UPDATE
 	scooter
 SET
 	customer_id=2,
-    rented=1,
     speed_kph=25
 WHERE
 	id=1;
@@ -91,10 +84,9 @@ UPDATE
 	scooter
 SET
 	customer_id = NULL,
-    rented=0,
     speed_kph=0,
-    lat_pos=58.1815656,
-    lon_pos=13.9546027
+    lat_pos=58.393154,
+    lon_pos=13.838048
 WHERE
 	id=1;
 

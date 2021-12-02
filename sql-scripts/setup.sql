@@ -1,6 +1,7 @@
 SET NAMES 'utf8';
--- CREATE DATABASE
+-- CREATE DATABASE (and test database)
 DROP DATABASE IF EXISTS sctr;
+DROP DATABASE IF EXISTS test_sctr;
 -- set root password
 ALTER USER 'root'@'localhost'
 IDENTIFIED WITH caching_sha2_password

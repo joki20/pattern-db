@@ -59,7 +59,7 @@ CREATE TABLE customer
     `username` VARCHAR(20) UNIQUE,
     `token` VARCHAR(200) DEFAULT NULL,
     `funds` DECIMAL(7, 2) DEFAULT 0,
-    `payment_terms` ENUM('invoice','prepaid') DEFAULT 'invoice',
+    `payment_terms` VARCHAR(10) DEFAULT NULL,
 
     PRIMARY KEY (`id`)
 )

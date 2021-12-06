@@ -1,4 +1,5 @@
-USE sctr; -- choose database (needed for MySQL Docker containers)
+-- choose database (needed for MySQL Docker containers)
+USE sctr;
 
 -- Enable LOAD DATA LOCAL INFILE on the server.
 --
@@ -117,9 +118,9 @@ IGNORE 1 LINES -- ignores header
 ;
 
 
--- ------------------
+-- --------------
 -- LOGG TABLE  --
--- ------------------
+-- --------------
 
 -- Add SQL to LOAD DATA LOCAL INFILE
 LOAD DATA LOCAL INFILE 'logg.csv'

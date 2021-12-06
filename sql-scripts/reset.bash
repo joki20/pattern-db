@@ -20,7 +20,7 @@ echo ">>> Insert data ($file)"
 mysql -uuser sctr < $file > /dev/null
 
 # BACKUP DB
-# mysqldump -udbwebb -p --routines --add-drop-database exam > backup.sql
+# mysqldump -uroot -p --routines --add-drop-database sctr > backup.sql
 
 # START BACKUP
-# mysql -uroot -p exam < backup.sql
+# mysql -uroot -p sctr < backup.sql

@@ -1,7 +1,9 @@
-USE sctr; -- choose database (needed for MySQL Docker containers)
 -- -----------------------------
 -- SCOOTER UPDATE, TEST LOG  --
 -- -----------------------------
+
+-- choose database (needed for MySQL Docker containers)
+USE sctr;
 
 -- Rent scooter (user with 'prepaid' payment form)
 UPDATE

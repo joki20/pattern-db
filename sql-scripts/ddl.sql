@@ -1,6 +1,17 @@
-USE sctr; -- choose database (needed for MySQL Docker containers)
--- All code with tables, views, procedures, triggers, and so on.
--- DROP TABLES, START WITH FOREIGN KEYS TO ELIMINATE DEPENDENCIES
+-- ------------------------------------------
+-- CREATE TABLES, FUNCTIONS AND TRIGGER LOGIC
+-- ------------------------------------------
+
+
+ -- choose database (needed for MySQL Docker containers)
+USE sctr;
+
+
+-- -----------------------------------
+-- DROP TABLES, FUNCTIONS AND TRIGGERS
+-- -----------------------------------
+
+-- Drop tables, start with foreign keys to eliminate dependencies
 DROP TABLE IF EXISTS apikeys;
 DROP TABLE IF EXISTS logg;
 DROP TABLE IF EXISTS scooter;
@@ -8,16 +19,17 @@ DROP TABLE IF EXISTS station;
 DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS adm;
-
 -- drop functions
 DROP FUNCTION IF EXISTS deg_to_rad;
 DROP FUNCTION IF EXISTS calc_geo_dist;
-
+-- drop triggers
 DROP TRIGGER IF EXISTS logg_insert;
 DROP TRIGGER IF EXISTS logg_update;
 
-DROP VIEW IF EXISTS v_logg;
 
+-- -------------
+-- CREATE TABLES
+-- -------------
 
 CREATE TABLE apikeys
 (
@@ -126,8 +138,7 @@ CREATE TABLE logg
 ENGINE INNODB
 ;
 
-
--- SET ALL ID TO START FROM 1
+-- Set all ID to start from 1
 ALTER TABLE scooter AUTO_INCREMENT = 1;
 ALTER TABLE customer AUTO_INCREMENT = 1;
 ALTER TABLE adm AUTO_INCREMENT = 1;
@@ -135,9 +146,10 @@ ALTER TABLE city AUTO_INCREMENT = 1;
 ALTER TABLE logg AUTO_INCREMENT = 1;
 
 
---
--- functions
 -- ----------------
+-- CREATE FUNCTIONS
+-- ----------------
+
 DELIMITER ;;
 -- Convert an angle in degrees to radians
 CREATE FUNCTION deg_to_rad(
@@ -177,10 +189,13 @@ BEGIN
 END;;
 DELIMITER ;
 
-DROP TRIGGER IF EXISTS logg_insert;
-DROP TRIGGER IF EXISTS logg_update;
+
+-- ----------------
+-- CREATE TRIGGERS
+-- ----------------
 
 DELIMITER ;;
+-- This trigger will insert a new travel log entry when a customer is assigned to a scooter
 CREATE TRIGGER logg_insert
 AFTER UPDATE
 ON scooter FOR EACH ROW -- chech each table row
@@ -203,6 +218,7 @@ DELIMITER ;
 
 
 DELIMITER ;;
+-- This trigger updates current travel log entry when customer not assigned anymore to scooter
 CREATE TRIGGER logg_update
 AFTER UPDATE
 ON scooter FOR EACH ROW -- chech each table row for changes
@@ -262,7 +278,6 @@ BEGIN
 
         -- TOTAL COST FOR SINGLE SCOOTER TRIP
         --
-
         -- if scooter was collected outside allowed zone and parked near charging station or zone, give discount
         IF @started_inside_city = 0 AND @ended_inside_city = 1 THEN
             SET @start_cost = @start_cost - @bring_home_discount;
@@ -313,92 +328,3 @@ BEGIN
 END
 ;;
 DELIMITER ;
-
-
-
-CREATE VIEW v_logg AS
-SELECT
-    cus.username AS username, -- don't change column names to simplify for frontend
-    s.location,
-    l.start_time,
-    l.end_time,
-    l.start_lat,
-    l.start_lon,
-    l.end_lat,
-    l.end_lon,
-    l.total_cost,
-    c.name
-FROM customer AS cus
-LEFT JOIN logg as l
-ON cus.id = l.customer_id
-LEFT JOIN scooter as sc
-ON sc.id = l.scooter_id
-LEFT JOIN station as s
-ON s.id = sc.station_id
-LEFT JOIN city as c
-ON c.id = s.id
-;
-
-
--- EXAMPLES OF OLDER PROCEDURES BELOW
-
-
-
-
-
-
-
-
--- -- PROCEDURES CALLED IN src/eshop.js
--- DROP PROCEDURE IF EXISTS ship_order; -- cli
--- DELIMITER ;;
--- CREATE PROCEDURE ship_order(
---     a_orderid CHAR(20)
--- )
-
--- BEGIN
---     UPDATE bestallning
---         SET skickad = CURRENT_TIMESTAMP
---     WHERE
---         orderid = a_orderid;
-
---     -- update lagerantal
---     UPDATE produkt2bestallning as p2b
---     LEFT JOIN produkt2lager AS p2l
---     ON p2b.produkt_id = p2l.produkt_id
---     SET p2l.antal = p2l.antal - p2b.antal
---     WHERE order_id = a_orderid;
-
---     -- if any lagerantal lower than 0, set to 0
---     UPDATE produkt2lager
---         SET antal = 0
---         WHERE antal < 0;
-
---     -- AFTER SHIPPED, CREATE FAKTURA ROW
---     INSERT INTO faktura (fakturanummer) VALUES (a_orderid);
-
---     -- CREATE FAKTURARADER ROWS FOR THAT ORDER, ONE ROW FOR EACH PRODUCT
---     SET @last_faktura_nr = (SELECT fakturanummer FROM faktura ORDER BY fakturanummer DESC LIMIT 1);
---     INSERT INTO fakturarader (order_id, produkt_id)
---     SELECT order_id, produkt_id FROM produkt2bestallning
---     WHERE order_id=@last_faktura_nr;
-
--- END
--- ;;
--- DELIMITER ;
-
-
--- -- PROCEDURES CALLED IN src/eshop.js
--- DROP PROCEDURE IF EXISTS payed_invoice; -- cli
--- DELIMITER ;;
--- CREATE PROCEDURE payed_invoice(
---     a_invoiceid CHAR(20),
---     a_date DATE -- YYYY-MM-DD
--- )
--- BEGIN
---     UPDATE bestallning
---         SET betald = a_date
---     WHERE orderid = a_invoiceid;
--- END;
--- ;;
--- DELIMITER ;

@@ -1,3 +1,7 @@
+-- -----------------------------------
+-- CREATE DATABASE AND ADD PRIVILLEGES
+-- -----------------------------------
+
 SET NAMES 'utf8';
 -- CREATE DATABASE (and test database)
 DROP DATABASE IF EXISTS sctr;

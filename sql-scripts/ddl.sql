@@ -59,7 +59,7 @@ CREATE TABLE customer
     `username` VARCHAR(20) UNIQUE,
     `token` VARCHAR(200) DEFAULT NULL,
     `funds` DECIMAL(7, 2) DEFAULT 0,
-    `payment_terms` VARCHAR(7) DEFAULT NULL,
+    `payment_terms` ENUM('invoice','prepaid') DEFAULT 'invoice',
 
     PRIMARY KEY (`id`)
 )
@@ -320,7 +320,7 @@ BEGIN
             UPDATE customer
             SET
                 funds = funds - @total_cost,
-                payment_terms = IF(funds - @total_cost < 0, "invoice", field)
+                payment_terms = IF(funds - @total_cost < 0, "invoice", payment_terms)
             WHERE
                 id = (SELECT * FROM (SELECT id FROM customer WHERE id = OLD.customer_id LIMIT 1) AS l);
         END IF;

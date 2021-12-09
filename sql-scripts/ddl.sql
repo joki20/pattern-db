@@ -320,8 +320,8 @@ BEGIN
             UPDATE customer
             SET
                 -- if funds goes below zero, set funds to zero and payment terms to "invoice"
-                funds = IF(funds - @total_cost < 0, 0, funds - @total_cost),
-                payment_terms = IF(funds - @total_cost < 0, "invoice", payment_terms)
+                funds = IF(funds - @total_cost <= 0, 0, funds - @total_cost),
+                payment_terms = IF(funds - @total_cost <= 0, "invoice", payment_terms)
             WHERE
                 id = (SELECT * FROM (SELECT id FROM customer WHERE id = OLD.customer_id LIMIT 1) AS l);
         END IF;

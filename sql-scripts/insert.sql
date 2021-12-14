@@ -24,10 +24,10 @@ DELETE FROM logg WHERE id > 0;
 INSERT INTO
     apikeys (client, apikey)
 VALUES
-    ('customerwebb', '3676397924422645'),
-    ('customerapp', '703273357638792F'),
-    ('adminwebb', '556A586E32723575'),
-    ('scooterclient', '635166546A576E5A'),
+    ('Ericsson', '3676397924422645'),
+    ('Naturskyddsföreningen', '703273357638792F'),
+    ('Region Blekinge', '556A586E32723575'),
+    ('Elsparkcykelstatistik AB', '635166546A576E5A'),
     (null, '3272357538782141'),
     (null, '6A576E5A72347537'),
     (null, '51655468576D5A71'),
